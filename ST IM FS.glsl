@@ -64,8 +64,7 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
             value = c4 * get_Tex(pos.zy);
             break;
             
-        case 4:
-        case 5:
+        case 4: case 5:
             vec3 c = c6;
         
             if (n_Cond == 4) c = c5;
