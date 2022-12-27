@@ -40,32 +40,32 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
          pos = (ro + t * rd) / size, tex = vec3(0), value = vec3(0); //green, top //red, bottom //yellow, right //orange, left //blue, front 
          //purple, back    
               
-    if (id > 0.9 && id < 1.1) {
+    if (0.9 < id && id < 1.1) {
         tex = texture(iChannel0, fract(vec2(pos.x, -pos.z))).xyz; 
         
         value = color1 * tex;        
     
-    } else if (id > 1.9 && id < 2.1) {
+    } else if (1.9 < id && id < 2.1) { 
         tex = texture(iChannel0, fract(pos.xz)).xyz; 
         
         value = color2 * tex;
     
-    } else if (id > 2.9 && id < 3.1) {
+    } else if (2.9 < id && id < 3.1) { 
         tex = texture(iChannel0, fract(vec2(-pos.z, pos.y))).xyz; 
         
         value = color3 * tex;
     
-    } else if (id > 3.9 && id < 4.1) {
+    } else if (3.9 < id && id < 4.1) { 
         tex = texture(iChannel0, fract(pos.zy)).xyz; 
         
         value = color4 * tex;
     
-    } else if (id > 4.9 && id < 5.1) {
+    } else if (4.9 < id && id < 5.1) { 
         tex = texture(iChannel0, fract(pos.xy)).xyz; 
         
         value = color5 * tex;
     
-    } else if (id > 5.9 && id < 6.1) {
+    } else if (5.9 < id && id < 6.1) { 
         tex = texture(iChannel0, fract(pos.xy)).xyz; 
         
         value = color6 * tex;
