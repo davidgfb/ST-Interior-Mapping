@@ -43,6 +43,7 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
          color4 = vec3(1.0, 0.77, 0.5), color5 = vec3(0.5, 0.78, 1.0), color6 = vec3(0.59, 0.56, 0.92), 
          pos = (ro + tID.x * rd) / size, tex = vec3(0), value = vec3(0); //green, top //red, bottom //yellow, right //orange, left //blue, front 
          //purple, back  //t  
+    bool c = 4.9 < id && id < 5.1, c1 = 5.9 < id && id < 6.1;
               
     if (0.9 < id && id < 1.1) {       
         value = color1 * get_Tex(vec2(pos.x, -pos.z));        
@@ -56,12 +57,15 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
     } else if (3.9 < id && id < 4.1) {         
         value = color4 * get_Tex(pos.zy);
     
-    } else if (4.9 < id && id < 5.1) {         
-        value = color5 * get_Tex(pos.xy);
-    
-    } else if (5.9 < id && id < 6.1) {         
-        value = color6 * get_Tex(pos.xy);
-    }    
+    } else if (c || c1) {  
+        vec3 color = color6;
+        
+        if (c) {
+            color = color5;
+        }
+        
+        value = color * get_Tex(pos.xy);
+    }       
     
     return value;
 }
