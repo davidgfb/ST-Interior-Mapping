@@ -28,48 +28,43 @@ vec3 r = vec3(1, 0, 0), g = vec3(0, 1, 0), b = vec3(0, 0, 1); //ruf
 
 vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
     float id = tID.y, v0 = 0.9;  
-    vec3 colores[6] = vec3[6](r, g, b, vec3(1), r + g, g + b);
-    //vec3 c1 = r, c2 = g, c3 = b, c4 = vec3(1), c5 = c1 + c2, c6 = c2 + c3, 
-    vec3 pos = (ro + tID.x * rd) / size, 
-         tex = vec3(0), value = vec3(0); //purple, back  //t  
-    int n_Cond = 0;
-    bool esta_Buscando = true;
+    vec3 colores[6] = vec3[6](r, g, b, vec3(1), r + g, g + b), pos = (ro + tID.x * rd) / size, tex = vec3(0), 
+         c = vec3(0); //t  
     
-    while (esta_Buscando) {
+    int pos_C = 0; //n_Cond
+    
+    for (int i = 0; i < 6; i++, v0++) {
         if (v0 < id && id < v0 + 0.2) {
-            esta_Buscando = false;
-        
-        } else {
-            v0 += 1.0;
-            n_Cond++;
-        } 
+            v0 = 6.1;
+            pos_C = i;            
+        }
     }
     
-    value = colores[n_Cond];
+    c = colores[pos_C];
     
-    switch (n_Cond) {  
+    switch (pos_C) {  
         case 0:
-            value *= get_Tex(vec2(pos.x, -pos.z));
+            c *= get_Tex(vec2(pos.x, -pos.z));
             break;
         
         case 1:
-            value *= get_Tex(pos.xz);
+            c *= get_Tex(pos.xz);
             break;
             
         case 2:
-            value *= get_Tex(vec2(-pos.z, pos.y));
+            c *= get_Tex(vec2(-pos.z, pos.y));
             break;
         
         case 3:
-            value *= get_Tex(pos.zy);
+            c *= get_Tex(pos.zy);
             break;
             
         case 4: case 5:
-            value *= get_Tex(pos.xy);
+            c *= get_Tex(pos.xy);
             break;
     }
      
-    return value;
+    return c;
 }
 
 void mainImage(out vec4 fragColor, vec2 fragCoord) {   
