@@ -1,19 +1,14 @@
-float get_T(float h, float ro_weight, float rd_weight) {
-    return (h - ro_weight) / rd_weight;
-}
-
 vec2 intersect(vec3 ro, vec3 rd, vec3 Axis, float d, int id1, int id2) {    //no id
     float rd_weight = dot(rd, Axis), ro_weight = dot(ro, Axis), pointer = ceil(ro_weight / d),
-          h = pointer * d, t = get_T(h, ro_weight, rd_weight); // rd_weight > 0.0, look up
-    vec2 value = vec2(t, id1);
+          h = pointer * d; 
+    int id3 = id1; // rd_weight > 0.0, look up
     
-    if(rd_weight <= 0.0) { // look down
-        t = get_T(h - d, ro_weight, rd_weight);
-        
-        value = vec2(t, id2);    
+    if (rd_weight <= 0.0) { //look down
+        h -= d;            
+        id3 = id2;
     }
-    
-    return value;
+             
+    return vec2((h - ro_weight) / rd_weight, id3);
 }
 
 vec2 nearest(vec2 c1, vec2 c2, vec2 c3) { //hay 1 pto fuga
