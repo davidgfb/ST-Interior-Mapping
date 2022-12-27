@@ -37,39 +37,41 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
     float t = tID.x, id = tID.y;  
     vec3 color1 = vec3(0.42, 0.85, 0.65), color2 = vec3(1.0, 0.67, 0.55), color3 = vec3(1.0, 0.9, 0.49), 
          color4 = vec3(1.0, 0.77, 0.5), color5 = vec3(0.5, 0.78, 1.0), color6 = vec3(0.59, 0.56, 0.92), 
-         pos = (ro + t * rd) / size; //green, top //red, bottom //yellow, right //orange, left //blue, front 
+         pos = (ro + t * rd) / size, tex = vec3(0), value = vec3(0); //green, top //red, bottom //yellow, right //orange, left //blue, front 
          //purple, back    
               
     if (id > 0.9 && id < 1.1) {
-        vec3 tex = texture( iChannel0, fract(vec2(pos.x,-pos.z)) ).xyz; 
+        tex = texture(iChannel0, fract(vec2(pos.x, -pos.z))).xyz; 
         
-        return color1 * tex;        
+        value = color1 * tex;        
     
     } else if (id > 1.9 && id < 2.1) {
-        vec3 tex = texture( iChannel0, fract(pos.xz) ).xyz; 
+        tex = texture(iChannel0, fract(pos.xz)).xyz; 
         
-        return color2 * tex;
+        value = color2 * tex;
     
     } else if (id > 2.9 && id < 3.1) {
-        vec3 tex = texture( iChannel0, fract(vec2(-pos.z,pos.y)) ).xyz; 
+        tex = texture(iChannel0, fract(vec2(-pos.z, pos.y))).xyz; 
         
-        return color3 * tex;
+        value = color3 * tex;
     
     } else if (id > 3.9 && id < 4.1) {
-        vec3 tex = texture( iChannel0, fract(pos.zy) ).xyz; 
+        tex = texture(iChannel0, fract(pos.zy)).xyz; 
         
-        return color4 * tex;
+        value = color4 * tex;
     
     } else if (id > 4.9 && id < 5.1) {
-        vec3 tex = texture( iChannel0, fract(pos.xy)).xyz; 
+        tex = texture(iChannel0, fract(pos.xy)).xyz; 
         
-        return color5 * tex;
+        value = color5 * tex;
     
     } else if (id > 5.9 && id < 6.1) {
-        vec3 tex = texture( iChannel0, fract(pos.xy) ).xyz; 
+        tex = texture(iChannel0, fract(pos.xy)).xyz; 
         
-        return color6 * tex;
+        value = color6 * tex;
     }    
+    
+    return value;
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
