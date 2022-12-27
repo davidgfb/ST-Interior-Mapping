@@ -1,15 +1,8 @@
-//Ray tracing
-//http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
-
-//Interior mapping 
-//http://interiormapping.oogst3d.net/
-
-//It is not optimized, but easy for me to understand step by step
 float get_T(float h, float ro_weight, float rd_weight) {
     return (h - ro_weight) / rd_weight;
 }
 
-vec2 intersect(vec3 ro, vec3 rd, vec3 Axis, float d, int id1, int id2) {    
+vec2 intersect(vec3 ro, vec3 rd, vec3 Axis, float d, int id1, int id2) {    //no id
     float rd_weight = dot(rd, Axis), ro_weight = dot(ro, Axis), pointer = ceil(ro_weight / d),
           h = pointer * d, t = get_T(h, ro_weight, rd_weight); // rd_weight > 0.0, look up
     vec2 value = vec2(t, id1);
@@ -39,32 +32,31 @@ vec3 get_Tex(vec2 v) {
 
 vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
     float id = tID.y;  
-    vec3 color1 = vec3(0.42, 0.85, 0.65), color2 = vec3(1.0, 0.67, 0.55), color3 = vec3(1.0, 0.9, 0.49), 
-         color4 = vec3(1.0, 0.77, 0.5), color5 = vec3(0.5, 0.78, 1.0), color6 = vec3(0.59, 0.56, 0.92), 
-         pos = (ro + tID.x * rd) / size, tex = vec3(0), value = vec3(0); //green, top //red, bottom //yellow, right //orange, left //blue, front 
+    vec3 c1 = vec3(1,0,0), c2 = vec3(0,1,0), c3 = vec3(0,0,1), c4 = vec3(1), c5 = c1 + c2, c6 = c2 + c3,          
+         pos = (ro + tID.x * rd) / size, tex = vec3(0), value = vec3(0); 
          //purple, back  //t  
-    bool c = 4.9 < id && id < 5.1, c1 = 5.9 < id && id < 6.1;
+    bool cond = 4.9 < id && id < 5.1, cond_1 = 5.9 < id && id < 6.1;
               
     if (0.9 < id && id < 1.1) {       
-        value = color1 * get_Tex(vec2(pos.x, -pos.z));        
+        value = c1 * get_Tex(vec2(pos.x, -pos.z));        
     
     } else if (1.9 < id && id < 2.1) {          
-        value = color2 * get_Tex(pos.xz);
+        value = c2 * get_Tex(pos.xz);
     
     } else if (2.9 < id && id < 3.1) {      
-        value = color3 * get_Tex(vec2(-pos.z, pos.y));
+        value = c3 * get_Tex(vec2(-pos.z, pos.y));
     
     } else if (3.9 < id && id < 4.1) {         
-        value = color4 * get_Tex(pos.zy);
+        value = c4 * get_Tex(pos.zy);
     
-    } else if (c || c1) {  
-        vec3 color = color6;
+    } else if (cond || cond_1) {  
+        vec3 c = c6;
         
-        if (c) {
-            color = color5;
+        if (cond) {
+            c = c5;
         }
         
-        value = color * get_Tex(pos.xy);
+        value = c * get_Tex(pos.xy);
     }       
     
     return value;
@@ -81,3 +73,7 @@ void mainImage(out vec4 fragColor, vec2 fragCoord) {
     // Output to screen
     fragColor = vec4(color, 1);
 }
+
+/*color1 = vec3(0.42, 0.85, 0.65), color2 = vec3(1.0, 0.67, 0.55), color3 = vec3(1.0, 0.9, 0.49), 
+         color4 = vec3(1.0, 0.77, 0.5), color5 = vec3(0.5, 0.78, 1.0), color6 = vec3(0.59, 0.56, 0.92),
+         green, top //red, bottom //yellow, right //orange, left //blue, front */
