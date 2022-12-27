@@ -30,28 +30,50 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
     float id = tID.y;  
     vec3 c1 = r, c2 = g, c3 = b, c4 = vec3(1), c5 = c1 + c2, c6 = c2 + c3, pos = (ro + tID.x * rd) / size, 
          tex = vec3(0), value = vec3(0); //purple, back  //t  
-    bool cond = 4.9 < id && id < 5.1, cond_1 = 5.9 < id && id < 6.1;
-              
-    if (0.9 < id && id < 1.1) {       
-        value = c1 * get_Tex(vec2(pos.x, -pos.z));        
+    //bool cond = 4.9 < id && id < 5.1, cond_1 = 5.9 < id && id < 6.1;
     
-    } else if (1.9 < id && id < 2.1) {          
-        value = c2 * get_Tex(pos.xz);
     
-    } else if (2.9 < id && id < 3.1) {      
-        value = c3 * get_Tex(vec2(-pos.z, pos.y));
+    int n_Cond = 0;
+    float v0 = 0.9;
+    bool esta_Buscando = true;
     
-    } else if (3.9 < id && id < 4.1) {         
-        value = c4 * get_Tex(pos.zy);
-    
-    } else if (cond || cond_1) {  
-        vec3 c = c6;
+    while (esta_Buscando) {
+        if (v0 < id && id < v0 + 0.2) {
+            esta_Buscando = false;
         
-        if (cond) c = c5;
-        
-        value = c * get_Tex(pos.xy);
-    }       
+        } else {
+            v0 += 1.0;
+            n_Cond++;
+        } 
+    }
     
+    switch (n_Cond) {
+        case 0:
+            value = c1 * get_Tex(vec2(pos.x, -pos.z)); 
+            break;
+        
+        case 1:
+            value = c2 * get_Tex(pos.xz);
+            break;
+            
+        case 2:
+            value = c3 * get_Tex(vec2(-pos.z, pos.y));
+            break;
+        
+        case 3:
+            value = c4 * get_Tex(pos.zy);
+            break;
+            
+        case 4:
+        case 5:
+            vec3 c = c6;
+        
+            if (n_Cond == 4) c = c5;
+
+            value = c * get_Tex(pos.xy);
+            break;
+    }
+     
     return value;
 }
 
@@ -66,3 +88,11 @@ void mainImage(out vec4 fragColor, vec2 fragCoord) {
     // Output to screen
     fragColor = vec4(color, 1);
 }
+
+/*for () {
+        nCond++;
+        i++;
+    }
+    
+    for (n_Cond = 0; n_Cond < 1; n_Cond++) {     
+    }*/ 
