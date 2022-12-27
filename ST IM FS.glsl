@@ -33,7 +33,7 @@ vec2 nearest(vec2 c1, vec2 c2, vec2 c3) { //hay 1 pto fuga
     return value;
 }
 
-vec3 get_Tex2(vec2 v) { 
+vec3 get_Tex(vec2 v) { 
     return texture(iChannel0, fract(v)).xyz; 
 }
 
@@ -45,36 +45,28 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
          //purple, back  //t  
               
     if (0.9 < id && id < 1.1) {       
-        value = color1 * get_Tex2(vec2(pos.x, -pos.z));        
+        value = color1 * get_Tex(vec2(pos.x, -pos.z));        
     
-    } else if (1.9 < id && id < 2.1) { 
-        tex = texture(iChannel0, fract(pos.xz)).xyz; 
-        
-        value = color2 * tex;
+    } else if (1.9 < id && id < 2.1) {          
+        value = color2 * get_Tex(pos.xz);
     
     } else if (2.9 < id && id < 3.1) {      
-        value = color3 * get_Tex2(vec2(-pos.z, pos.y));
+        value = color3 * get_Tex(vec2(-pos.z, pos.y));
     
-    } else if (3.9 < id && id < 4.1) { 
-        tex = texture(iChannel0, fract(pos.zy)).xyz; 
-        
-        value = color4 * tex;
+    } else if (3.9 < id && id < 4.1) {         
+        value = color4 * get_Tex(pos.zy);
     
-    } else if (4.9 < id && id < 5.1) { 
-        tex = texture(iChannel0, fract(pos.xy)).xyz; 
-        
-        value = color5 * tex;
+    } else if (4.9 < id && id < 5.1) {         
+        value = color5 * get_Tex(pos.xy);
     
-    } else if (5.9 < id && id < 6.1) { 
-        tex = texture(iChannel0, fract(pos.xy)).xyz; 
-        
-        value = color6 * tex;
+    } else if (5.9 < id && id < 6.1) {         
+        value = color6 * get_Tex(pos.xy);
     }    
     
     return value;
 }
 
-void mainImage(out vec4 fragColor, in vec2 fragCoord) {   
+void mainImage(out vec4 fragColor, vec2 fragCoord) {   
     vec3 cameraPos = vec3(sin(iTime), cos(iTime) / 2.0, 0), 
          ro = vec3((fragCoord * 2.0 - iResolution.xy) / iResolution.y, 2.14), rd = normalize(ro - cameraPos),
          size = vec3(0.8, 0.6, 1), up = vec3(0, 1, 0), right = vec3(1, 0, 0), front = vec3(0, 0, 1), 
