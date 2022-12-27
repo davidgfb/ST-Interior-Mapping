@@ -32,10 +32,10 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
 void mainImage(out vec4 fragColor, vec2 fragCoord) {   
     vec3 cameraPos = vec3(sin(iTime), cos(iTime) / 2.0, 0), 
          ro = vec3((fragCoord * 2.0 - iResolution.xy) / iResolution.y, 2.14), rd = normalize(ro - cameraPos),
-         size = vec3(0.8, 0.6, 1), right = r, up = g, front = b;        
-    vec2 c1 = intersect(ro, rd, up, size.y, 1, 2), c2 = intersect(ro, rd, right, size.x, 3, 4), 
-         c3 = intersect(ro, rd, front, size.z, 5, 6), value = c2.x < c3.x ? c2 : c3; //hay 1 pto fuga //c1.x >= c2.x 
-    
+         size = vec3(0.8, 0.6, 1);        
+    vec2 c1 = intersect(ro, rd, g, size.y, 1, 2), c2 = intersect(ro, rd, r, size.x, 3, 4), //right, up
+         c3 = intersect(ro, rd, b, size.z, 5, 6), value = c2.x < c3.x ? c2 : c3; //hay 1 pto fuga //c1.x >= c2.x 
+         //front
     if(c1.x < c2.x) {
         value = c1.x < c3.x ? c1 : c3;  
     }     
