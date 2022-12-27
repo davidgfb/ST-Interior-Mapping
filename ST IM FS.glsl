@@ -10,20 +10,6 @@ vec2 intersect(vec3 ro, vec3 rd, vec3 Axis, float d, int id1, int id2) {    //no
     return vec2((h - ro_weight) / rd_weight, id3);
 }
 
-vec2 nearest(vec2 c1, vec2 c2, vec2 c3) { //hay 1 pto fuga
-    vec2 value = c2.x < c3.x ? c2 : c3; //c1.x >= c2.x 
-    
-    if(c1.x < c2.x) {
-        value = c1.x < c3.x ? c1 : c3;  
-    } 
-    
-    return value;
-}
-
-vec3 get_Tex(vec2 v) { 
-    return texture(iChannel0, fract(v)).xyz; 
-}
-
 vec3 r = vec3(1, 0, 0), g = vec3(0, 1, 0), b = vec3(0, 0, 1); //ruf 
 
 vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
@@ -39,41 +25,22 @@ vec3 render(in vec2 tID, in vec3 ro, in vec3 rd, in vec3 size) {
             pos_C = i;            
         }
     }
-    
-    c = colores[pos_C];
-    
-    switch (pos_C) {  
-        case 0:
-            c *= get_Tex(vec2(pos.x, -pos.z));
-            break;
-        
-        case 1:
-            c *= get_Tex(pos.xz);
-            break;
-            
-        case 2:
-            c *= get_Tex(vec2(-pos.z, pos.y));
-            break;
-        
-        case 3:
-            c *= get_Tex(pos.zy);
-            break;
-            
-        case 4: case 5:
-            c *= get_Tex(pos.xy);
-            break;
-    }
-     
-    return c;
+         
+    return colores[pos_C];
 }
 
 void mainImage(out vec4 fragColor, vec2 fragCoord) {   
     vec3 cameraPos = vec3(sin(iTime), cos(iTime) / 2.0, 0), 
          ro = vec3((fragCoord * 2.0 - iResolution.xy) / iResolution.y, 2.14), rd = normalize(ro - cameraPos),
-         size = vec3(0.8, 0.6, 1), right = r, up = g, front = b, 
-         color = render(nearest(intersect(ro, rd, up, size.y, 1, 2), intersect(ro, rd, right, size.x, 3, 4), 
-                 intersect(ro, rd, front, size.z, 5, 6)), ro, rd, size);
-         //tiene que ser 2.1...2.19 //uv // render  //clave // intersect //tID1...3
+         size = vec3(0.8, 0.6, 1), right = r, up = g, front = b;        
+    vec2 c1 = intersect(ro, rd, up, size.y, 1, 2), c2 = intersect(ro, rd, right, size.x, 3, 4), 
+         c3 = intersect(ro, rd, front, size.z, 5, 6), value = c2.x < c3.x ? c2 : c3; //hay 1 pto fuga //c1.x >= c2.x 
+    
+    if(c1.x < c2.x) {
+        value = c1.x < c3.x ? c1 : c3;  
+    }     
+             
+    vec3 color = render(value, ro, rd, size); //tiene que ser 2.1...2.19 //uv // render  //clave // intersect //tID1...3
 
     // Output to screen
     fragColor = vec4(color, 1);
